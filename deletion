@@ -1,0 +1,77 @@
+import psycopg2
+from psycopg2 import OperationalError
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def connect_to_database():
+    connection = None
+    
+    try:
+        # Database connection parameters
+        database = os.getenv("DB_NAME")
+        user = os.getenv("DB_USER")
+        password = os.getenv("DB_PASSWORD")
+        host = os.getenv("DB_HOST")
+        port = os.getenv("DB_PORT")
+
+        # Establish the database connection
+        connection = psycopg2.connect(
+            database=database,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+        )
+        connection.autocommit = True
+        print("Connected to the database!")
+        return connection
+
+    except OperationalError as e:
+        print(f"Error: {e}")
+        return None
+
+def delete_all_data(connection):
+    try:
+        cursor = connection.cursor()
+
+        # Delete records from orderitems table
+        cursor.execute("DELETE FROM orderitems;")
+
+        # Delete records from orders table
+        cursor.execute("DELETE FROM orders;")
+
+        # Delete records from customers table
+        cursor.execute("DELETE FROM customers;")
+
+        # Delete records from books table
+        cursor.execute("DELETE FROM books;")
+
+        # Delete records from authors table
+        cursor.execute("DELETE FROM authors;")
+
+        # Reset sequences
+        cursor.execute("SELECT setval('orderitems_order_item_id_seq', 1, false);")
+        cursor.execute("SELECT setval('orders_order_id_seq', 1, false);")
+        cursor.execute("SELECT setval('customers_customer_id_seq', 1, false);")
+        cursor.execute("SELECT setval('books_book_id_seq', 1, false);")
+        cursor.execute("SELECT setval('authors_author_id_seq', 1, false);")
+
+        connection.commit()
+        print("All data deleted and sequences reset.")
+
+    except psycopg2.Error as e:
+        print(f"Error during data deletion: {e}")
+    finally:
+        cursor.close()
+
+if __name__ == "__main__":
+    db_connection = connect_to_database()
+
+    # Check if the connection is successful before proceeding
+    if db_connection is not None:
+        delete_all_data(db_connection)
+
+    # Close the connection when done
+    db_connection.close()
