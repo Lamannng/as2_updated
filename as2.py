@@ -1,5 +1,10 @@
 import psycopg2
 from psycopg2 import OperationalError
+import os
+from dotenv import load_dotenv
+from datetime import date
+
+load_dotenv
 
 def connect_to_database():
     connection = None
