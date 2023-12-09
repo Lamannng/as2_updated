@@ -4,18 +4,19 @@ import os
 from dotenv import load_dotenv
 from datetime import date
 
-load_dotenv
+load_dotenv()
 
 def connect_to_database():
     connection = None
-
+    
+    
     try:
         # Database connection parameters
-        database = "postgres"
-        user = "postgres"
-        password = "l2911q55"
-        host = "localhost"
-        port = "5432"
+        database = os.getenv("DB_NAME")
+        user = os.getenv("DB_USER")
+        password = os.getenv("DB_PASSWORD")
+        host = os.getenv("DB_HOST")
+        port = os.getenv("DB_PORT")
 
         # Establish the database connection
         connection = psycopg2.connect(
@@ -25,21 +26,16 @@ def connect_to_database():
             host=host,
             port=port
         )
-
+        connection.autocommit = True
         # Connection successful, perform database operations here
+        
         print("Connected to the database!")
+        return connection
 
     except OperationalError as e:
         # Handle OperationalError (Database connection failure)
         print(f"Error: {e}")
-    finally:
-        # Close the connection in the finally block to ensure it's always closed
-        if connection is not None:
-            connection.close()
-
-if __name__ == "__main__":
-    connect_to_database()
-
+        return None
 
 
 # 3rd part of assignment, implementing CRUD operations
@@ -107,7 +103,6 @@ if db_connection is not None:
           author_ids = insert_authors(db_connection, authors_data)
           insert_books(db_connection, [(title, quantity, price, author_ids[i % len(author_ids)]) for i, (title, quantity, price, _) in enumerate(books_data)] )
           
-      ##    closing conn
           db_connection.close() 
 
 
