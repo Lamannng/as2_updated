@@ -102,6 +102,9 @@ db_connection = connect_to_database()
 # 
 
 
+
+#inserting customer table
+
 def insert_customer(connection, customer_name, email, phone_number):
     try:
         query = "INSERT INTO customers (customer_name, email, phone_number) VALUES (%s, %s, %s) RETURNING customer_id;"
@@ -119,7 +122,7 @@ def insert_customer(connection, customer_name, email, phone_number):
         cursor.close()
 
 
-
+#insertion process of order table
 def insert_order(connection, order_date, customer_id):
     try:
         query = "INSERT INTO orders (order_date, customer_id) VALUES (%s, %s) RETURNING order_id;"
@@ -136,6 +139,9 @@ def insert_order(connection, order_date, customer_id):
         print(f"Error during order insertion: {e}")
     finally:
         cursor.close()       
+
+
+#insertion process of orderitems table
 
 def insert_order_item(connection, order_id, book_id, quantity):
     try:
