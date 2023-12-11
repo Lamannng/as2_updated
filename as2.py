@@ -206,7 +206,7 @@ def connect_to_database():
 #         db_connection.close()
 
 
-#task 3 - ii
+#task 3 - part ii
 #Retriving info
 
 def retrieve_books_with_authors_and_orders(connection):
@@ -288,7 +288,7 @@ if __name__ == "__main__":
 
 
 
-
+#Task 3 part - iii
 # def update_books(connection, book_id, new_stock_quantity, new_price):
 #     try:
 #         query = "UPDATE books SET stock_quantity = %s, price = %s WHERE book_id = %s;"
@@ -315,6 +315,7 @@ if __name__ == "__main__":
 
 #         db_connection.close()
 
+#Task 3 - iv
 def remove_book(connection, book_id):
     try:
         query_orderitems = "DELETE FROM orderitems WHERE book_id = %s;"
@@ -349,4 +350,17 @@ if __name__ == "__main__":
         retrieve_books_with_authors_and_orders(db_connection)
 
         db_connection.close()
+
+def remove_book(conection, book_id):
+    try:
+        #removing items from orderitems related to book
+        query_orderitems = "DELEWTE FROM orderitems WHERE book_id = %s;"
+        values_orderitems = (book_id,)
+        cursor_orderitems = conection.cursor()
+        cursor_books.execute(query_books, values_books)
+        connection.commit()
+
+
+
+
 
