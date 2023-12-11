@@ -351,15 +351,30 @@ if __name__ == "__main__":
 
         db_connection.close()
 
-def remove_book(conection, book_id):
+def insert_order(connection, order_date, customer_id, book_id, quantity):
     try:
-        #removing items from orderitems related to book
-        query_orderitems = "DELEWTE FROM orderitems WHERE book_id = %s;"
-        values_orderitems = (book_id,)
-        cursor_orderitems = conection.cursor()
-        cursor_books.execute(query_books, values_books)
+        #checking if enough books are available
+        check_query = "SELECT stock_quantity FROM books WHERE book_id = %s;"
+        check_cursor = conection.cursor()
+        check_cursor.execute(check_query, (book_id,))
+        available_quantity = check_cursor.fetchone()[0]
+
+        if available_quantity < quantity:
+            print(f"Error: Not enough books available for order. Available: {available_quantity}, Requested: {quantity}")
+        return
+    
+    connection.autocommit= False
+        
+        
+        
+        #removing book entry from ooks table
+        query_books = "DELETE FROM books WHERE book_id = %s;"
+        values_books = (book_id,)
+        cursor_books = conection.cursor()
+        cursor_books.execute(query_books, values_books)]
         connection.commit()
 
+        print(f"Book with ID {book_id} and related info ")        
 
 
 
