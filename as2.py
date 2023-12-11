@@ -289,26 +289,61 @@ if __name__ == "__main__":
 
 
 
-def update_books(connection, book_id, new_stock_quantity, new_price):
+# def update_books(connection, book_id, new_stock_quantity, new_price):
+#     try:
+#         query = "UPDATE books SET stock_quantity = %s, price = %s WHERE book_id = %s;"
+#         values = (new_stock_quantity, new_price, book_id)
+#         cursor = connection.cursor()
+#         cursor.execute(query, values)
+#         connection.commit()
+#         print(f"Book with ID {book_id} updated successfully.")
+#     except psycopg2.Error as e:
+#         print(f"Error during book update: {e}")
+#     finally:
+#         cursor.close()
+
+# if __name__ == "__main__":
+#     db_connection = connect_to_database()
+
+#     if db_connection is not None:
+#         # Updating the stock quantity and price of a book with ID 1 and 3
+#         update_books(db_connection, book_id=1, new_stock_quantity=33, new_price=19.99)
+#         update_books(db_connection, book_id=3, new_stock_quantity=17.5, new_price=21.99)
+
+#         # Retrieving updated book information
+#         retrieve_books_with_authors_and_orders(db_connection)
+
+#         db_connection.close()
+
+def remove_book(connection, book_id):
     try:
-        query = "UPDATE books SET stock_quantity = %s, price = %s WHERE book_id = %s;"
-        values = (new_stock_quantity, new_price, book_id)
-        cursor = connection.cursor()
-        cursor.execute(query, values)
+        query_orderitems = "DELETE FROM orderitems WHERE book_id = %s;"
+        values_orderitems = (book_id,)
+        cursor_orderitems = connection.cursor()
+        cursor_orderitems.execute(query_orderitems, values_orderitems)
+        cursor_orderitems.close()
+
+        query_books = "DELETE FROM books WHERE book_id = %s;"
+        values_books = (book_id,)
+        cursor_books = connection.cursor()
+        cursor_books.execute(query_books, values_books)
         connection.commit()
-        print(f"Book with ID {book_id} updated successfully.")
+
+        print(f"Book with ID {book_id} and related information removed successfully.")
+
+
+
     except psycopg2.Error as e:
-        print(f"Error during book update: {e}")
+        print(f"Error during book removal: {e}")
     finally:
-        cursor.close()
+        cursor_books.close()
 
 if __name__ == "__main__":
     db_connection = connect_to_database()
 
     if db_connection is not None:
-        # Updating the stock quantity and price of a book with ID 1 and 3
-        update_books(db_connection, book_id=1, new_stock_quantity=33, new_price=19.99)
-        update_books(db_connection, book_id=3, new_stock_quantity=17.5, new_price=21.99)
+        # removing book with id 2
+        remove_book(db_connection, book_id=2)
 
         # Retrieving updated book information
         retrieve_books_with_authors_and_orders(db_connection)
