@@ -438,7 +438,20 @@ if __name__ == "__main__":
         table_structure = get_table_structure(db_connection, 'books')
         print("\nTable Structure for 'books':", table_structure)
         
-        primary_keys = get_primary_keys(db_connection, 'books')
-        print("\nPrimary Keys for 'books':", primary_keys)
+    primary_keys_books = get_primary_keys(db_connection, 'books')
+    primary_keys_authors = get_primary_keys(db_connection, 'authors')
+    primary_keys_customers = get_primary_keys(db_connection, 'customers')
+    primary_keys_orders = get_primary_keys(db_connection, 'orders')
+    primary_keys_orderitems = get_primary_keys(db_connection, 'orderitems')
+    
+    
+    print(f"\nPrimary Key for 'books': {primary_keys_books[0][1] if primary_keys_books else 'Not found'}")
+    print(f"\nPrimary Key for 'authors': {primary_keys_authors[0][1] if primary_keys_authors else 'Not found'}")
+    print(f"\nPrimary Key for 'customers': {primary_keys_customers[0][1] if primary_keys_customers else 'Not found'}")
+    print(f"\nPrimary Key for 'orders': {primary_keys_orders[0][1] if primary_keys_orders else 'Not found'}")
+    print(f"\nPrimary Key for 'orderitems': {primary_keys_orderitems[0][1] if primary_keys_orderitems else 'Not found'}")
 
-        db_connection.close()
+
+        
+        
+db_connection.close()
