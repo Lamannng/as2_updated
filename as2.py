@@ -409,6 +409,22 @@ def get_table_structure(connection, table_name):
         print(f"Error retrieving table structure for {table_name}: {e}")
         return None
 
+def get_primary_keys(connection, table_name):
+    try:
+        query = f"""
+            SELECT constraint_name, column_name
+            FROM information_schema.key_column_usage
+            WHERE table_name = '{table_name}' AND constraint_name LIKE '%_pkey'
+            """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        primary_keys = cursor.fetchall()
+        cursor.close()
+        return primary_keys
+
+    except psycopg2.Error as e:
+        print(f"Error retrieving primary keys for {table_name}: {e}")
+        return None
 
 if __name__ == "__main__":
     db_connection = connect_to_database()
@@ -421,5 +437,8 @@ if __name__ == "__main__":
         # Get and display table structure for the 'books' table
         table_structure = get_table_structure(db_connection, 'books')
         print("\nTable Structure for 'books':", table_structure)
+        
+        primary_keys = get_primary_keys(db_connection, 'books')
+        print("\nPrimary Keys for 'books':", primary_keys)
 
         db_connection.close()
