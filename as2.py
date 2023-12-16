@@ -374,3 +374,21 @@ if __name__ == "__main__":
 
 #Task 5 - Accessing metadata
 
+#getting table names
+def get_table_names(connection):
+    try:
+        query = """
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+            """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        table_names = cursor.fetchall()
+        cursor.close()
+        return [name[0] for name in table_names]
+
+    except psycopg2.Error as e:
+        print(f"Error retrieving table names: {e}")
+        return None
+
