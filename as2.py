@@ -8,8 +8,6 @@ load_dotenv()
 
 def connect_to_database():
     connection = None
-    
-    
     try:
         # Database connection parameters
         database = os.getenv("DB_NAME")
@@ -27,8 +25,6 @@ def connect_to_database():
             port=port
         )
         connection.autocommit = True
-        # Connection successful, perform database operations here
-        
         print("Connected to the database!")
         return connection
 
@@ -38,7 +34,9 @@ def connect_to_database():
         return None
 
 
-# # INSERTION part of assignment, implementing CRUD operations
+# #INSERTION
+
+# # INSERTION OF AUTHORS
 # def insert_authors(connection, authors_data):
 #         try:
             
@@ -142,7 +140,6 @@ def connect_to_database():
 
 
 # #insertion process of orderitems table
-
 # def insert_order_item(connection, order_id, book_id, quantity):
 #     try:
 #         query = """
@@ -160,6 +157,7 @@ def connect_to_database():
 #             connection.commit()
 #             print(f"Order Item added with ID: {order_item_id[0]}")
 #             return order_item_id[0]
+        
 #         else:
 #             print(f"Error: Book with ID {book_id} does not exist.")
 
@@ -173,10 +171,9 @@ def connect_to_database():
 
 #     # Check if the connection is successful before proceeding
 #     if db_connection is not None:
-
 #         author_ids = insert_authors(db_connection, authors_data)
-#         insert_books(db_connection, [(title, quantity, price, author_ids[i % len(author_ids)]) for i, (title, quantity, price, _) in enumerate(books_data)])
-        
+#         insert_books(db_connection, [(title, quantity, price, author_ids[i % len(author_ids)]) for i,
+#                                       (title, quantity, price, _) in enumerate(books_data)])
         
 #         # Insert four customers
 #         customer_ids = []
@@ -192,8 +189,6 @@ def connect_to_database():
 #             for i in range(1, 3):
 #                 order_date = date.today()
 #                 order_id = insert_order(db_connection, order_date, customer_id)
-
-
 #                 cursor = db_connection.cursor()
 #                 cursor.execute("SELECT book_id FROM books;")
 #                 book_ids = cursor.fetchall()
@@ -204,11 +199,8 @@ def connect_to_database():
 #                     insert_order_item(db_connection, order_id, book_id[0], quantity)
 #         # Close the connection when done
 #         db_connection.close()
-
-
-#task 3 - part ii
-#Retriving info
-
+    
+#task 3 - ii  Retriving info
 def retrieve_books_with_authors_and_orders(connection):
     try:
         query = """ 
@@ -256,39 +248,10 @@ if __name__ == "__main__":
     if db_connection is not None:
         retrieve_books_with_authors_and_orders(db_connection)
         db_connection.close()
-# #printing headers for each table
-#         print("Books Information")
-#         print("Book ID | Title | Stock Quantity | Price | Author")
-#         print("-------------------------------------------------")
-#         for row in book_info:
-#             print(f"{row[0]:<8} | {row[1]:<30} | {row[2]:<15} | {row[3]:<10} | {row[4]:<20}")
-
-#         print("\nOrders Information")
-#         print("Order ID | Order Date | Customer Name")
-#         print("-------------------------------------")
-#         for row in book_info:
-#             # Print the order-related columns                                  
-#             print(f"{row[0]:<8} | {row[1]:<12} | {row[2]:<15} | {row[3]:<14} | {row[4]:<20}")
-
-
-#     except  psycopg2.Error as e:
-#           print(f"Error during retrieval: {e}")
-#     finally:
-#         cursor.close()
-        
-    
-# if __name__ == "__main__":
-#     db_connection = connect_to_database()
-
-#     if db_connection is not None:
-#         retrieve_books_with_authors_and_orders(db_connection)
-
-#         db_connection.close()
 
 
 
-
-#Task 3 part - iii
+# #Task 3 part - iii
 # def update_books(connection, book_id, new_stock_quantity, new_price):
 #     try:
 #         query = "UPDATE books SET stock_quantity = %s, price = %s WHERE book_id = %s;"
@@ -315,67 +278,99 @@ if __name__ == "__main__":
 
 #         db_connection.close()
 
-#Task 3 - iv
-def remove_book(connection, book_id):
-    try:
-        query_orderitems = "DELETE FROM orderitems WHERE book_id = %s;"
-        values_orderitems = (book_id,)
-        cursor_orderitems = connection.cursor()
-        cursor_orderitems.execute(query_orderitems, values_orderitems)
-        cursor_orderitems.close()
+# #Task 3 - iv
+# def remove_book(connection, book_id):
+#     try:
+#         query_orderitems = "DELETE FROM orderitems WHERE book_id = %s;"
+#         values_orderitems = (book_id,)
+#         cursor_orderitems = connection.cursor()
+#         cursor_orderitems.execute(query_orderitems, values_orderitems)
+#         cursor_orderitems.close()
 
-        query_books = "DELETE FROM books WHERE book_id = %s;"
-        values_books = (book_id,)
-        cursor_books = connection.cursor()
-        cursor_books.execute(query_books, values_books)
-        connection.commit()
+#         query_books = "DELETE FROM books WHERE book_id = %s;"
+#         values_books = (book_id,)
+#         cursor_books = connection.cursor()
+#         cursor_books.execute(query_books, values_books)
+#         connection.commit()
 
-        print(f"Book with ID {book_id} and related information removed successfully.")
+#         print(f"Book with ID {book_id} and related information removed successfully.")
 
 
 
-    except psycopg2.Error as e:
-        print(f"Error during book removal: {e}")
-    finally:
-        cursor_books.close()
+#     except psycopg2.Error as e:
+#         print(f"Error during book removal: {e}")
+#     finally:
+#         cursor_books.close()
 
-if __name__ == "__main__":
-    db_connection = connect_to_database()
+# if __name__ == "__main__":
+#     db_connection = connect_to_database()
 
-    if db_connection is not None:
-        # removing book with id 2
-        remove_book(db_connection, book_id=2)
+#     if db_connection is not None:
+#         # removing book with id 2
+#         remove_book(db_connection, book_id=2)
 
-        # Retrieving updated book information
-        retrieve_books_with_authors_and_orders(db_connection)
+#         # Retrieving updated book information
+#         retrieve_books_with_authors_and_orders(db_connection)
 
-        db_connection.close()
+#         db_connection.close()
 
-def insert_order(connection, order_date, customer_id, book_id, quantity):
-    try:
-        #checking if enough books are available
-        check_query = "SELECT stock_quantity FROM books WHERE book_id = %s;"
-        check_cursor = conection.cursor()
-        check_cursor.execute(check_query, (book_id,))
-        available_quantity = check_cursor.fetchone()[0]
 
-        if available_quantity < quantity:
-            print(f"Error: Not enough books available for order. Available: {available_quantity}, Requested: {quantity}")
-        return
-    
-    connection.autocommit= False
+
+# #Task 4 Transaction management 
+# def insert_order(connection, order_date, customer_id, book_id, quantity):
+#     try:
+#         # Check if enough books are available
+#         check_query = "SELECT stock_quantity FROM books WHERE book_id = %s;"
+#         check_cursor = connection.cursor()
+#         check_cursor.execute(check_query, (book_id,))
+#         available_quantity = check_cursor.fetchone()[0]
+
+#         if available_quantity < quantity:
+#             print(f"Error: Not enough books available for order. Available: {available_quantity}, Requested: {quantity}")
+#             return
+
+#         # Start the transaction
+#         connection.autocommit = False
+
+#         # Insert the order
+#         order_query = "INSERT INTO orders (order_date, customer_id) VALUES (%s, %s) RETURNING order_id;"
+#         order_values = (order_date, customer_id)
+#         order_cursor = connection.cursor()
+#         order_cursor.execute(order_query, order_values)
+#         order_id = order_cursor.fetchone()[0]
+
+#         # Update the book stock quantity
+#         update_query = "UPDATE books SET stock_quantity = stock_quantity - %s WHERE book_id = %s;"
+#         update_values = (quantity, book_id)
+#         update_cursor = connection.cursor()
+#         update_cursor.execute(update_query, update_values)
+
+#         # Commit the transaction
+#         connection.commit()
+
+#         print(f"Order added with ID: {order_id}")
+#     except psycopg2.Error as e:
+#         # Handle exceptions by rolling back changes
+#         connection.rollback()
+#         print(f"Error during order placement: {e}")
+#     finally:
+#         # Reset autocommit to True and close cursors
+#         connection.autocommit = True
+#         check_cursor.close()
+#         order_cursor.close()
+#         update_cursor.close()
+
+# if __name__ == "__main__":
+#     db_connection = connect_to_database()
+
+#     if db_connection is not None:
+#         # inserting an order for customer by replacing values with actual data
+#         insert_order(db_connection, order_date=date.today(), customer_id=1, book_id=1, quantity = 2)
         
+  
+#         # Retrieving updated book information
+#         db_connection.close()
         
-        
-        #removing book entry from ooks table
-        query_books = "DELETE FROM books WHERE book_id = %s;"
-        values_books = (book_id,)
-        cursor_books = conection.cursor()
-        cursor_books.execute(query_books, values_books)]
-        connection.commit()
 
-        print(f"Book with ID {book_id} and related info ")        
-
-
-
+#Task 5 - Accessing metadata
 
