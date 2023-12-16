@@ -200,54 +200,54 @@ def connect_to_database():
 #         # Close the connection when done
 #         db_connection.close()
     
-#task 3 - ii  Retriving info
-def retrieve_books_with_authors_and_orders(connection):
-    try:
-        query = """ 
-            SELECT
-                b.book_id,
-                b.title,
-                b.stock_quantity,
-                b.price,
-                a.author_name,
-                o.order_id,
-                o.order_date,
-                c.customer_name
-            FROM
-                books b
-            JOIN authors a ON b.author_id = a.author_id
-            LEFT JOIN orderitems oi ON b.book_id = oi.book_id
-            LEFT JOIN orders o ON oi.order_id = o.order_id
-            LEFT JOIN customers c ON o.customer_id = c.customer_id
-            ORDER BY
-                o.order_id, b.book_id;
-                """
-        cursor =connection.cursor()
-        cursor.execute(query)
-        book_info = cursor.fetchall()
+# #task 3 - ii  Retriving info
+# def retrieve_books_with_authors_and_orders(connection):
+#     try:
+#         query = """ 
+#             SELECT
+#                 b.book_id,
+#                 b.title,
+#                 b.stock_quantity,
+#                 b.price,
+#                 a.author_name,
+#                 o.order_id,
+#                 o.order_date,
+#                 c.customer_name
+#             FROM
+#                 books b
+#             JOIN authors a ON b.author_id = a.author_id
+#             LEFT JOIN orderitems oi ON b.book_id = oi.book_id
+#             LEFT JOIN orders o ON oi.order_id = o.order_id
+#             LEFT JOIN customers c ON o.customer_id = c.customer_id
+#             ORDER BY
+#                 o.order_id, b.book_id;
+#                 """
+#         cursor =connection.cursor()
+#         cursor.execute(query)
+#         book_info = cursor.fetchall()
         
-        current_order_id = None
-        for row in book_info:
-            if row[5] != current_order_id:
-                if current_order_id is not None:
-                    print()  # Add a newline between orders
-                print(f"Order ID: {row[5]} | Order Date: {row[6]} | Customer Name: {row[7]}")
-                print("-" * 50)
-                current_order_id = row[5]
+#         current_order_id = None
+#         for row in book_info:
+#             if row[5] != current_order_id:
+#                 if current_order_id is not None:
+#                     print()  # Add a newline between orders
+#                 print(f"Order ID: {row[5]} | Order Date: {row[6]} | Customer Name: {row[7]}")
+#                 print("-" * 50)
+#                 current_order_id = row[5]
 
-            print(f"{row[0]} | {row[1]} | {row[2]} | {row[3]} | {row[4]}")
-    except psycopg2.Error as e:
-        print(f"Error during retrieval: {e}")
-    finally:
-        cursor.close()
+#             print(f"{row[0]} | {row[1]} | {row[2]} | {row[3]} | {row[4]}")
+#     except psycopg2.Error as e:
+#         print(f"Error during retrieval: {e}")
+#     finally:
+#         cursor.close()
 
 
-if __name__ == "__main__":
-    db_connection = connect_to_database()
+# if __name__ == "__main__":
+#     db_connection = connect_to_database()
 
-    if db_connection is not None:
-        retrieve_books_with_authors_and_orders(db_connection)
-        db_connection.close()
+#     if db_connection is not None:
+#         retrieve_books_with_authors_and_orders(db_connection)
+#         db_connection.close()
 
 
 
@@ -392,3 +392,34 @@ def get_table_names(connection):
         print(f"Error retrieving table names: {e}")
         return None
 
+def get_table_structure(connection, table_name):
+    try:
+        query = f"""
+            SELECT column_name, data_type
+            FROM information_schema.columns
+            WHERE table_name = '{table_name}'
+            """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        table_structure = cursor.fetchall()
+        cursor.close()
+        return table_structure
+
+    except psycopg2.Error as e:
+        print(f"Error retrieving table structure for {table_name}: {e}")
+        return None
+
+
+if __name__ == "__main__":
+    db_connection = connect_to_database()
+    
+    if db_connection is not None:
+        # Get and display table names
+        table_names = get_table_names(db_connection)
+        print("Table Names:", table_names)
+
+        # Get and display table structure for the 'books' table
+        table_structure = get_table_structure(db_connection, 'books')
+        print("\nTable Structure for 'books':", table_structure)
+
+        db_connection.close()
