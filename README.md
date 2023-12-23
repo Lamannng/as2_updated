@@ -21,8 +21,8 @@ This Python application manages a bookstore database, allowing users to perform 
 
 Ensure you have the following installed:
 
-- PostgreSQL database
-  
+- [PostgreSQL database](https://www.postgresql.org/)
+
 ### Environment Variables
 
 Set up the following environment variables:
@@ -32,16 +32,6 @@ Set up the following environment variables:
 - `DB_PASSWORD`: Your PostgreSQL password
 - `DB_HOST`: Your PostgreSQL host
 - `DB_PORT`: Your PostgreSQL port
-
-## Usage
-
-1. **Connect to the Database:**
-   ```python
-   from bookstore_manager import connect_to_database
-
-   # Establish a connection to the database
-   db_connection = connect_to_database()
-
 
 # Bookstore Database
 
@@ -59,12 +49,15 @@ This Python application interacts with a PostgreSQL database to manage a booksto
 
 - **`orderitems`**: Represents the many-to-many relationship between orders and books. It stores information such as order item ID, order ID, book ID, and quantity.
 
-## Connecting to the Database
 
-To connect to the PostgreSQL database, the application uses the `psycopg2` library. Database connection parameters, including name, user, password, host, and port, are loaded from environment variables.
+## Usage
+
+### Connecting to the Database
 
 ```python
-# Example of connecting to the database
+from bookstore_manager import connect_to_database
+
+# Establish a connection to the database
 db_connection = connect_to_database()
 
 # Example of inserting authors and books
@@ -93,36 +86,4 @@ display_table_names(db_connection)
 display_table_structure(db_connection, 'books')
 display_primary_keys(db_connection, 'books')
 display_foreign_keys(db_connection, 'books')
-
-
-Database Schema
-Authors Table
-author_id (Serial Primary Key)
-author_name (VARCHAR, Not Null)
-birthdate (DATE)
-nationality (VARCHAR)
-
-Books Table
-book_id (Serial Primary Key)
-title (VARCHAR, Not Null)
-stock_quantity (INTEGER, Not Null)
-price (DECIMAL(10, 2), Not Null)
-author_id (INTEGER, Foreign Key to Authors)
-
-Customers Table
-customer_id (Serial Primary Key)
-customer_name (VARCHAR, Not Null)
-email (VARCHAR, Not Null)
-phone_number (VARCHAR)
-
-Orders Table
-order_id (Serial Primary Key)
-order_date (DATE, Not Null)
-customer_id (INTEGER, Foreign Key to Customers)
-
-OrderItems Table
-order_item_id (Serial Primary Key)
-order_id (INTEGER, Foreign Key to Orders)
-book_id (INTEGER, Foreign Key to Books)
-quantity (INTEGER, Not Null)
 
