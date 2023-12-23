@@ -95,3 +95,34 @@ display_primary_keys(db_connection, 'books')
 display_foreign_keys(db_connection, 'books')
 
 
+Database Schema
+Authors Table
+author_id (Serial Primary Key)
+author_name (VARCHAR, Not Null)
+birthdate (DATE)
+nationality (VARCHAR)
+
+Books Table
+book_id (Serial Primary Key)
+title (VARCHAR, Not Null)
+stock_quantity (INTEGER, Not Null)
+price (DECIMAL(10, 2), Not Null)
+author_id (INTEGER, Foreign Key to Authors)
+
+Customers Table
+customer_id (Serial Primary Key)
+customer_name (VARCHAR, Not Null)
+email (VARCHAR, Not Null)
+phone_number (VARCHAR)
+
+Orders Table
+order_id (Serial Primary Key)
+order_date (DATE, Not Null)
+customer_id (INTEGER, Foreign Key to Customers)
+
+OrderItems Table
+order_item_id (Serial Primary Key)
+order_id (INTEGER, Foreign Key to Orders)
+book_id (INTEGER, Foreign Key to Books)
+quantity (INTEGER, Not Null)
+
