@@ -1,4 +1,15 @@
 # Bookstore Management Application
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+  - [Environment Variables](#environment-variables)
+- [Usage](#usage)
+  - [Connecting to the Database](#connecting-to-the-database)
+  - [Inserting Data](#inserting-data)
+  ...
+
 
 ## Introduction
 
@@ -11,8 +22,7 @@ This Python application manages a bookstore database, allowing users to perform 
 Ensure you have the following installed:
 
 - PostgreSQL database
-- Python (version X.X.X)
-
+  
 ### Environment Variables
 
 Set up the following environment variables:
@@ -22,16 +32,6 @@ Set up the following environment variables:
 - `DB_PASSWORD`: Your PostgreSQL password
 - `DB_HOST`: Your PostgreSQL host
 - `DB_PORT`: Your PostgreSQL port
-
-## Database Schema and ER Diagram
-
-Brief description of the database schema:
-
-- `books`: [Description]
-- `authors`: [Description]
-- `customers`: [Description]
-- `orders`: [Description]
-- `orderitems`: [Description]
 
 ## Usage
 
